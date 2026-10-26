@@ -1,0 +1,605 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>Gen Ai Application</title>-->
+<!--</head>-->
+<!--<body>-->
+<!--    <h2>Personalized Diet Plan Generator</h2>-->
+<!--    <br>-->
+<!--    <form action="" method="post">-->
+<!--        <label for="">Enter your name:</label>-->
+<!--        <br>-->
+<!--        <input type="text" name="name">-->
+<!--        <br><br>-->
+
+<!--        <label for="">Enter your age:</label>-->
+<!--        <br>-->
+<!--        <input type="number" name="age">-->
+<!--        <br><br>-->
+
+<!--        <label for="">Enter your Height(cm):</label>-->
+<!--        <br>-->
+<!--        <input type="number" name="height">-->
+<!--        <br><br>-->
+<!--        -->
+<!--        <label for="">Enter your Weight(kg):</label>-->
+<!--        <br>-->
+<!--        <input type="number" name="weight">-->
+<!--        <br><br>-->
+<!--        -->
+<!--        <label for="">Enter your BMI:</label>-->
+<!--        <br>-->
+<!--        <input type="number" name="bmi">-->
+<!--        <br><br>-->
+
+<!--        <label for="">Select your target:</label>-->
+<!--        <br>-->
+<!--        <select name="target" id="">-->
+<!--            <option value="No choice">No choice</option>-->
+<!--            <option value="Weight gain">Weight gain</option>-->
+<!--            <option value="Weight loss">Weight loss</option>-->
+<!--        </select>-->
+<!--        <br><br>-->
+
+<!--        <label for="">Enter your workout timing(min)</label>-->
+<!--        <br>-->
+<!--        <input type="number" name="time">-->
+<!--        <br><br>-->
+
+<!--        <label for="">Select your meal preference:</label>-->
+<!--        <br>-->
+<!--        <select name="meal" id="">-->
+<!--            <option value="No choice">No choice</option>-->
+<!--            <option value="Veg meal">Veg meal</option>-->
+<!--            <option value="Non-veg meal">Non-veg meal</option>-->
+<!--        </select>-->
+<!--        <br><br>-->
+<!--        -->
+<!--         <label for="">Select your plan type:</label>-->
+<!--        <br>-->
+<!--        <select name="plan_type" id="">-->
+<!--            <option value="No choice">No choice</option>-->
+<!--            <option value="Weekly">Weekly </option>-->
+<!--            <option value="Monthly">Monthly</option>-->
+<!--        </select>-->
+<!--        <br><br>-->
+
+<!--        <input type="submit">-->
+<!--        -->
+<!--    </form>-->
+<!--</body>-->
+<!--</html>-->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personalized Diet Plan Generator</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        /* ---------- Global Styles ---------- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #16a34a;
+            --primary-dark: #15803d;
+            --text: #183b2a;
+            --muted: #657568;
+            --glass: rgba(255, 255, 255, 0.76);
+            --border: rgba(255, 255, 255, 0.85);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            color: var(--text);
+            padding: 45px 20px;
+            overflow-x: hidden;
+
+            background:
+                radial-gradient(ellipse at 10% 10%, #d9f99d 0%, transparent 35%),
+                radial-gradient(ellipse at 90% 15%, #bbf7d0 0%, transparent 35%),
+                radial-gradient(ellipse at 80% 90%, #dcfce7 0%, transparent 35%),
+                linear-gradient(135deg, #f0fdf4, #f8fafc 55%, #ecfccb);
+
+            background-attachment: fixed;
+        }
+
+        /* ---------- Animated Background ---------- */
+        .background-shape {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(2px);
+            z-index: -1;
+            pointer-events: none;
+            animation: float 9s ease-in-out infinite;
+        }
+
+        .shape-one {
+            width: 180px;
+            height: 180px;
+            background: rgba(74, 222, 128, 0.23);
+            top: 8%;
+            left: -65px;
+        }
+
+        .shape-two {
+            width: 240px;
+            height: 240px;
+            background: rgba(163, 230, 53, 0.20);
+            right: -90px;
+            bottom: 5%;
+            animation-delay: -4s;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) translateX(0);
+            }
+            50% {
+                transform: translateY(-25px) translateX(12px);
+            }
+        }
+
+        /* ---------- Main Container ---------- */
+        .page-container {
+            width: 100%;
+            max-width: 850px;
+            margin: 0 auto;
+            animation: pageEnter 0.8s ease-out both;
+        }
+
+        @keyframes pageEnter {
+            from {
+                opacity: 0;
+                transform: translateY(25px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ---------- Header ---------- */
+        .hero {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .brand-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 9px 16px;
+            border: 1px solid rgba(22, 163, 74, 0.15);
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.65);
+            color: var(--primary-dark);
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1.3px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        .brand-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #22c55e;
+            box-shadow: 0 0 12px rgba(34, 197, 94, 0.65);
+        }
+
+        .hero h1 {
+            font-size: clamp(30px, 5vw, 45px);
+            line-height: 1.2;
+            font-weight: 800;
+            letter-spacing: -1.8px;
+            margin-bottom: 14px;
+            color: #173d28;
+        }
+
+        .hero h1 span {
+            color: #16a34a;
+        }
+
+        .hero p {
+            max-width: 550px;
+            margin: 0 auto;
+            color: var(--muted);
+            font-size: 15px;
+            line-height: 1.8;
+        }
+
+        /* ---------- Glassmorphic Form Card ---------- */
+        .form-card {
+            position: relative;
+            overflow: hidden;
+            padding: 38px;
+            border: 1px solid var(--border);
+            border-radius: 28px;
+            background: var(--glass);
+            box-shadow:
+                0 25px 70px rgba(22, 101, 52, 0.10),
+                0 5px 20px rgba(15, 23, 42, 0.04),
+                inset 0 1px 0 rgba(255, 255, 255, 0.9);
+
+            backdrop-filter: blur(22px);
+            -webkit-backdrop-filter: blur(22px);
+
+            transition: box-shadow 0.35s ease,
+                        border-color 0.35s ease;
+        }
+
+        .form-card:hover {
+            box-shadow: 0 30px 80px rgba(22, 101, 52, 0.15);
+            border-color: rgba(134, 239, 172, 0.8);
+        }
+
+        .form-heading {
+            margin-bottom: 30px;
+        }
+
+        .form-heading h2 {
+            font-size: 22px;
+            font-weight: 750;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .form-heading p {
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        /* ---------- Form Grid ---------- */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 24px 22px;
+        }
+
+        .form-group {
+            min-width: 0;
+            animation: fieldEnter 0.55s ease-out both;
+        }
+
+        .form-group:nth-child(1) { animation-delay: 0.05s; }
+        .form-group:nth-child(2) { animation-delay: 0.10s; }
+        .form-group:nth-child(3) { animation-delay: 0.15s; }
+        .form-group:nth-child(4) { animation-delay: 0.20s; }
+        .form-group:nth-child(5) { animation-delay: 0.25s; }
+        .form-group:nth-child(6) { animation-delay: 0.30s; }
+        .form-group:nth-child(7) { animation-delay: 0.35s; }
+        .form-group:nth-child(8) { animation-delay: 0.40s; }
+
+        @keyframes fieldEnter {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 650;
+            margin-bottom: 10px;
+            color: #294b36;
+            transition: color 0.25s ease;
+        }
+
+        .form-group:focus-within label {
+            color: var(--primary-dark);
+        }
+
+        /* ---------- Inputs and Dropdowns ---------- */
+        input[type="text"],
+        input[type="number"],
+        select {
+            width: 100%;
+            height: 52px;
+            padding: 0 15px;
+            border: 1px solid #dce8df;
+            border-radius: 13px;
+            outline: none;
+            background: rgba(255, 255, 255, 0.82);
+            color: #1f3828;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 500;
+
+            transition:
+                border-color 0.25s ease,
+                box-shadow 0.25s ease,
+                background 0.25s ease,
+                transform 0.25s ease;
+        }
+
+        input::placeholder {
+            color: #9aa99e;
+        }
+
+        input:hover,
+        select:hover {
+            border-color: #86c99b;
+            background: #ffffff;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: #22a052;
+            background: #ffffff;
+            box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.12);
+            transform: translateY(-1px);
+        }
+
+        select {
+            cursor: pointer;
+        }
+
+        select option {
+            background: #ffffff;
+            color: #183b2a;
+        }
+
+        /* ---------- Submit Button ---------- */
+        .submit-wrapper {
+            margin-top: 32px;
+        }
+
+        input[type="submit"] {
+            position: relative;
+            display: block;
+            width: 100%;
+            min-height: 56px;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 14px;
+            cursor: pointer;
+
+            background: linear-gradient(135deg, #22c55e, #15803d);
+            color: #ffffff;
+            font-family: inherit;
+            font-size: 15px;
+            font-weight: 750;
+            letter-spacing: 0.2px;
+
+            box-shadow: 0 10px 24px rgba(22, 163, 74, 0.23);
+
+            transition:
+                transform 0.25s ease,
+                box-shadow 0.25s ease,
+                filter 0.25s ease;
+        }
+
+        input[type="submit"]:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(22, 163, 74, 0.32);
+            filter: brightness(1.05);
+        }
+
+        input[type="submit"]:active {
+            transform: translateY(0) scale(0.99);
+            box-shadow: 0 5px 12px rgba(22, 163, 74, 0.2);
+        }
+
+        input[type="submit"]:focus-visible {
+            outline: 3px solid #86efac;
+            outline-offset: 4px;
+        }
+
+        .privacy-note {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 7px;
+            margin-top: 17px;
+            color: #718174;
+            font-size: 11px;
+            text-align: center;
+            line-height: 1.6;
+        }
+
+        /* ---------- Footer ---------- */
+        footer {
+            padding: 25px 10px 0;
+            text-align: center;
+            color: #718174;
+            font-size: 12px;
+            line-height: 1.8;
+        }
+
+        footer span {
+            color: #15803d;
+            font-weight: 700;
+        }
+
+        /* ---------- Responsive Design ---------- */
+        @media (max-width: 600px) {
+            body {
+                padding: 30px 14px;
+            }
+
+            .hero {
+                margin-bottom: 23px;
+            }
+
+            .hero h1 {
+                letter-spacing: -1px;
+            }
+
+            .hero p {
+                font-size: 13px;
+            }
+
+            .form-card {
+                padding: 25px 20px;
+                border-radius: 22px;
+            }
+
+            .form-heading h2 {
+                font-size: 20px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+                gap: 21px;
+            }
+
+            input[type="text"],
+            input[type="number"],
+            select {
+                height: 50px;
+            }
+
+            .submit-wrapper {
+                margin-top: 27px;
+            }
+        }
+
+        /* Respect reduced-motion preferences */
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="background-shape shape-one"></div>
+    <div class="background-shape shape-two"></div>
+
+    <main class="page-container">
+
+        <!-- Header -->
+        <header class="hero">
+            <div class="brand-tag">
+                <span class="brand-dot"></span>
+                Smart Nutrition Powered by AI
+            </div>
+
+            <h1>Your Health, <span>Your Plan.</span></h1>
+
+            <p>
+                Build a personalized diet plan around your body, fitness goals,
+                and food preferences with the power of Generative AI.
+            </p>
+        </header>
+
+        <!-- Diet Form -->
+        <section class="form-card">
+
+            <div class="form-heading">
+                <h2>Let's personalize your nutrition</h2>
+                <p>Enter your details below to generate your diet plan.</p>
+            </div>
+
+            <form action="" method="post">
+
+                <div class="form-grid">
+
+                    <div class="form-group">
+                        <label for="name">Enter your name</label>
+                        <input type="text" id="name" name="name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="age">Enter your age</label>
+                        <input type="number" id="age" name="age">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="height">Enter your Height (cm)</label>
+                        <input type="number" id="height" name="height">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="weight">Enter your Weight (kg)</label>
+                        <input type="number" id="weight" name="weight">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="bmi">Enter your BMI</label>
+                        <input type="number" id="bmi" name="bmi">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="target">Select your target</label>
+                        <select name="target" id="target">
+                            <option value="No choice">No choice</option>
+                            <option value="Weight gain">Weight gain</option>
+                            <option value="Weight loss">Weight loss</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="time">Enter your workout timing (min)</label>
+                        <input type="number" id="time" name="time">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="meal">Select your meal preference</label>
+                        <select name="meal" id="meal">
+                            <option value="No choice">No choice</option>
+                            <option value="Veg meal">Veg meal</option>
+                            <option value="Non-veg meal">Non-veg meal</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="plan_type">Select your plan type</label>
+                        <select name="plan_type" id="plan_type">
+                            <option value="No choice">No choice</option>
+                            <option value="Weekly">Weekly</option>
+                            <option value="Monthly">Monthly</option>
+                        </select>
+                    </div>
+
+                </div>
+
+                <div class="submit-wrapper">
+                    <input type="submit" value="Generate My Diet Plan →">
+                </div>
+
+                <p class="privacy-note">
+                    ✦ Personalized nutrition starts with your details
+                </p>
+
+            </form>
+        </section>
+
+        <footer>
+            Designed for your wellness journey <span>♥</span><br>
+            AI-generated guidance should be reviewed by a qualified nutrition professional.
+        </footer>
+
+    </main>
+
+</body>
+</html>
